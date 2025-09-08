@@ -23,40 +23,45 @@ end
 if game:GetService("CoreGui"):FindFirstChild("Info") then
     game:GetService("CoreGui").Info:Destroy()
 end
-
 local lp = game.Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
 local Info = Instance.new("ScreenGui")
 Info.Name = "Info"
 Info.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Info.Parent = game:GetService("CoreGui")
+Info.IgnoreGuiInset = true
 
--- ฟังก์ชันสร้าง Profile
+-- Function to create Profile
 local function CreateProfile(parent)
     local Profile = Instance.new("Frame")
     Profile.Name = "Profile"
     Profile.Parent = parent
     Profile.AnchorPoint = Vector2.new(0.5, 0.5)
-    Profile.Position = UDim2.new(0.5, 0, 0.1, 0) -- กลางจอด้านบน
-    Profile.Size = UDim2.new(0, 106, 0, 58)
+    Profile.Position = UDim2.new(0.5, 0, 0.15, 0)
+    Profile.Size = UDim2.new(0, 100, 0, 75) -- Fixed size with dynamic adjustment
+    if UserInputService.TouchEnabled then
+        Profile.Size = UDim2.new(0, 100, 0, 50) -- Smaller for mobile
+    end
     Profile.BackgroundTransparency = 1
 
-    -- ImageLabel
     local ImageLabel = Instance.new("ImageLabel", Profile)
-    ImageLabel.Size = UDim2.new(0, 97, 0, 95)
-    ImageLabel.Position = UDim2.new(0.05, 0, -0.2, 0)
+    ImageLabel.Size = UDim2.new(0.9, 0, 0.9, 0)
+    ImageLabel.Position = UDim2.new(0.05, 0, 0.05, 0)
     ImageLabel.BackgroundTransparency = 1
     ImageLabel.Image = "rbxassetid://138499235512768"
+    ImageLabel.ScaleType = Enum.ScaleType.Fit
 
-    -- UIStroke
     local UIStroke = Instance.new("UIStroke", ImageLabel)
-    UIStroke.Thickness = 1.5
+    UIStroke.Thickness = 2
     UIStroke.Color = Color3.fromRGB(255, 200, 0)
 
-    -- กรอบหลัง
     local Frame = Instance.new("Frame", Profile)
-    Frame.Size = UDim2.new(0, 107, 0, 106)
-    Frame.Position = UDim2.new(0, 0, -0.3, 0)
+    Frame.Size = UDim2.new(1, 0, 1, 0)
+    Frame.Position = UDim2.new(0, 0, 0, 0)
     Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Frame.BackgroundTransparency = 0
     Frame.ZIndex = 0
 
     return Profile
@@ -66,73 +71,103 @@ end
 local Username = Instance.new("Frame", Info)
 Username.Name = "Username"
 Username.AnchorPoint = Vector2.new(0.5, 0.5)
-Username.Position = UDim2.new(0.25, 0, 0.55, 0)
-Username.Size = UDim2.new(0, 399, 0, 349)
+Username.Position = UDim2.new(0.25, 0, 0.5, 0)
+Username.Size = UDim2.new(0, 200, 0, 150)
+if UserInputService.TouchEnabled then
+    Username.Size = UDim2.new(0, 150, 0, 100)
+end
 Username.BackgroundTransparency = 0.5
 Username.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Instance.new("UICorner", Username)
+Instance.new("UICorner", Username).CornerRadius = UDim.new(0, 12)
 Instance.new("UIStroke", Username).Color = Color3.fromRGB(255, 201, 0)
 
 local title = Instance.new("TextLabel", Username)
 title.Text = "ชื่อในเกม"
-title.Position = UDim2.new(0.2, 0, 0, 0)
-title.Size = UDim2.new(0, 200, 0, 50)
+title.Position = UDim2.new(0.1, 0, 0.05, 0)
+title.Size = UDim2.new(0.8, 0, 0.15, 0)
 title.BackgroundTransparency = 1
 title.TextScaled = true
 title.Font = Enum.Font.Code
-title.TextColor3 = Color3.fromRGB(255,255,255)
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local usernameText = Instance.new("TextLabel", Username)
 usernameText.Text = lp.Name
-usernameText.Position = UDim2.new(0.25, 0, 0.38, 0)
-usernameText.Size = UDim2.new(0, 300, 0, 62)
+usernameText.Position = UDim2.new(0.3, 0, 0.3, 0)
+usernameText.Size = UDim2.new(0.6, 0, 0.2, 0)
 usernameText.BackgroundTransparency = 1
 usernameText.TextScaled = true
 usernameText.Font = Enum.Font.Code
-usernameText.TextColor3 = Color3.fromRGB(255,255,255)
+usernameText.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-local icon = Instance.new("ImageButton",Username)
+local icon = Instance.new("ImageButton", Username)
 icon.Image = "rbxassetid://11449143572"
-icon.Size = UDim2.new(0, 150, 0, 102)
-icon.Position = UDim2.new(-0.0500000007, 0, 0.33333, 0)
+icon.Size = UDim2.new(0, 50, 0, 50)
+if UserInputService.TouchEnabled then
+    icon.Size = UDim2.new(0, 40, 0, 40)
+end
+icon.Position = UDim2.new(0.05, 0, 0.3, 0)
 icon.BackgroundTransparency = 1
+icon.AutoButtonColor = true
+icon.Activated:Connect(function()
+    print("Icon clicked!")
+end)
+if UserInputService.TouchEnabled then
+    icon.TouchTap:Connect(function()
+        print("Icon touched!")
+    end)
+end
 
 -- === Diamond ===
 local diamondFrame = Instance.new("Frame", Info)
 diamondFrame.Name = "Diamond"
 diamondFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-diamondFrame.Position = UDim2.new(0.75, 0, 0.55, 0)
-diamondFrame.Size = UDim2.new(0, 399, 0, 349)
+diamondFrame.Position = UDim2.new(0.75, 0, 0.5, 0)
+diamondFrame.Size = UDim2.new(0, 200, 0, 150)
+if UserInputService.TouchEnabled then
+    diamondFrame.Size = UDim2.new(0, 150, 0, 100)
+end
 diamondFrame.BackgroundTransparency = 0.5
-diamondFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-Instance.new("UICorner", diamondFrame)
-Instance.new("UIStroke", diamondFrame).Color = Color3.fromRGB(255,201,0)
+diamondFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Instance.new("UICorner", diamondFrame).CornerRadius = UDim.new(0, 12)
+Instance.new("UIStroke", diamondFrame).Color = Color3.fromRGB(255, 201, 0)
 
 local diamondTitle = Instance.new("TextLabel", diamondFrame)
 diamondTitle.Text = "เพชรในเกม"
-diamondTitle.Size = UDim2.new(0,200,0,50)
-diamondTitle.Position = UDim2.new(0.25,0,0,0)
+diamondTitle.Size = UDim2.new(0.5, 0, 0.15, 0)
+diamondTitle.Position = UDim2.new(0.25, 0, 0.05, 0)
 diamondTitle.BackgroundTransparency = 1
 diamondTitle.TextScaled = true
 diamondTitle.Font = Enum.Font.Code
-diamondTitle.TextColor3 = Color3.fromRGB(255,255,255)
+diamondTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local diamondIcon = Instance.new("ImageButton", diamondFrame)
 diamondIcon.Image = "rbxassetid://713512637"
-diamondIcon.Size = UDim2.new(0,100,0,105)
-diamondIcon.Position = UDim2.new(0.09, 0, 0.337, 0)
+diamondIcon.Size = UDim2.new(0, 50, 0, 50)
+if UserInputService.TouchEnabled then
+    diamondIcon.Size = UDim2.new(0, 40, 0, 40)
+end
+diamondIcon.Position = UDim2.new(0, 3, 0.3, 0)
 diamondIcon.BackgroundTransparency = 1
+diamondIcon.AutoButtonColor = true
+diamondIcon.Activated:Connect(function()
+    print("Diamond icon clicked!")
+end)
+if UserInputService.TouchEnabled then
+    diamondIcon.TouchTap:Connect(function()
+        print("Diamond icon touched!")
+    end)
+end
 
 local diamondCount = Instance.new("TextLabel", diamondFrame)
 diamondCount.Text = "Diamond: Loading..."
-diamondCount.Position = UDim2.new(0.35,0,0.38,0)
-diamondCount.Size = UDim2.new(0,200,0,62)
+diamondCount.Position = UDim2.new(0.35, 0, 0.3, 0)
+diamondCount.Size = UDim2.new(0.5, 0, 0.2, 0)
 diamondCount.BackgroundTransparency = 1
 diamondCount.TextScaled = true
 diamondCount.Font = Enum.Font.Code
-diamondCount.TextColor3 = Color3.fromRGB(255,255,255)
+diamondCount.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- sync diamond จาก UI จริง
+-- Sync diamond count
 task.spawn(function()
     local pg = lp:WaitForChild("PlayerGui")
     local interface = pg:WaitForChild("Interface", 10)
@@ -143,6 +178,8 @@ task.spawn(function()
         countLabel:GetPropertyChangedSignal("Text"):Connect(function()
             diamondCount.Text = "Diamond: " .. countLabel.Text
         end)
+    else
+        diamondCount.Text = "Diamond: N/A"
     end
 end)
 
@@ -151,56 +188,58 @@ local timeFrame = Instance.new("Frame", Info)
 timeFrame.Name = "Time"
 timeFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 timeFrame.Position = UDim2.new(0.5, 0, 0.85, 0)
-timeFrame.Size = UDim2.new(0, 339, 0, 54)
+timeFrame.Size = UDim2.new(0, 180, 0, 40)
+if UserInputService.TouchEnabled then
+    timeFrame.Size = UDim2.new(0, 140, 0, 30)
+end
 timeFrame.BackgroundTransparency = 0.5
-timeFrame.BackgroundColor3 = Color3.fromRGB(255,248,0)
-Instance.new("UICorner", timeFrame)
-Instance.new("UIStroke", timeFrame).Color = Color3.fromRGB(255,255,255)
+timeFrame.BackgroundColor3 = Color3.fromRGB(255, 248, 0)
+Instance.new("UICorner", timeFrame).CornerRadius = UDim.new(0, 8)
+Instance.new("UIStroke", timeFrame).Color = Color3.fromRGB(255, 255, 255)
 
 local timeText = Instance.new("TextLabel", timeFrame)
 timeText.Text = "Time: Loading..."
-timeText.Size = UDim2.new(0,300,0,33)
-timeText.Position = UDim2.new(0.05,0,0.2,0)
+timeText.Size = UDim2.new(0.9, 0, 0.6, 0)
+timeText.Position = UDim2.new(0.05, 0, 0.2, 0)
 timeText.BackgroundTransparency = 1
 timeText.TextScaled = true
 timeText.Font = Enum.Font.Code
-timeText.TextColor3 = Color3.fromRGB(255,255,255)
+timeText.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 local function UpdateTime()
     local GameTime = math.floor(workspace.DistributedGameTime + 0.5)
     local Hour = math.floor(GameTime / 3600) % 24
     local Minute = math.floor(GameTime / 60) % 60
     local Second = GameTime % 60
-    timeText.Text = ("Hour : %02d Minute : %02d Second : %02d"):format(Hour, Minute, Second)
+    timeText.Text = ("Hour: %02d Minute: %02d Second: %02d"):format(Hour, Minute, Second)
 end
 
-task.spawn(function()
-    while task.wait(1) do
-        pcall(UpdateTime)
-    end
-end)
+RunService.Heartbeat:Connect(UpdateTime)
 
 -- === Credit ===
 local creditFrame = Instance.new("Frame", Info)
 creditFrame.Name = "Credit"
 creditFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-creditFrame.Position = UDim2.new(0.5,0,0.28,0)
-creditFrame.Size = UDim2.new(0,328,0,51)
+creditFrame.Position = UDim2.new(0.5, 0, 0.3, 0)
+creditFrame.Size = UDim2.new(0, 180, 0, 30)
+if UserInputService.TouchEnabled then
+    creditFrame.Size = UDim2.new(0, 140, 0, 25)
+end
 creditFrame.BackgroundTransparency = 0.5
-creditFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
-Instance.new("UICorner", creditFrame)
-Instance.new("UIStroke", creditFrame).Color = Color3.fromRGB(255,201,0)
+creditFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Instance.new("UICorner", creditFrame).CornerRadius = UDim.new(0, 8)
+Instance.new("UIStroke", creditFrame).Color = Color3.fromRGB(255, 201, 0)
 
 local creditText = Instance.new("TextLabel", creditFrame)
-creditText.Text = "Facebook : Ařm Fa'ârm"
-creditText.Size = UDim2.new(0,300,0,40)
-creditText.Position = UDim2.new(0.05,0,0,5)
+creditText.Text = "Facebook: Ařm Fa'ârm"
+creditText.Size = UDim2.new(0.9, 0, 0.7, 0)
+creditText.Position = UDim2.new(0.05, 0, 0.15, 0)
 creditText.BackgroundTransparency = 1
 creditText.TextScaled = true
 creditText.Font = Enum.Font.Code
-creditText.TextColor3 = Color3.fromRGB(255,255,255)
+creditText.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- เรียก Profile
+-- Call Profile
 CreateProfile(Info)
 
 local CONFIG = {
